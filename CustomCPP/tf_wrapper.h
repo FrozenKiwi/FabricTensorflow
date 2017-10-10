@@ -5,6 +5,7 @@
 
 class TFGraphWrapper
 {
+public:
 	TF_Graph* graph;
 	TF_Status* status;
 
@@ -19,5 +20,6 @@ class TFGraphWrapper
 	TF_Session* session;
 };
 
-TFGraphWrapper* TFLoadGraph(const char* filepath, int numOutputs);
+TFGraphWrapper* TFLoadGraph(const char* filepath, const char* inputOpName, int numInputs, int numOutputs);
+
 bool TFEvalGraph(TFGraphWrapper* graph, float* inputs, int numinputs, float* outputs, int numoutputs);

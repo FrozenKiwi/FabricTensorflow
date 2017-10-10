@@ -65,7 +65,7 @@ fabricBuildEnv.Install(stage_dir, dll)
 fabricBuildEnv.Install(stage_dir, kl_files)
 fabricBuildEnv.Install(stage_dir, fpm_file)
 if platform.system() == 'Windows':
-  fabricBuildEnv.Install(stage_dir, '{0}/libs/{1}.dll'.format(tfPath, extensionName))
+  fabricBuildEnv.Install(stage_dir, '{0}/{1}.dll'.format(tfPath, extensionName))
 else:
   fabricBuildEnv.Install(stage_dir, tfPath + '/bin/tensorflow.so')
 

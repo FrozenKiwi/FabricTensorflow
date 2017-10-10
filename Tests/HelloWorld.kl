@@ -1,0 +1,11 @@
+//
+// Testing file for KL2DFG.
+//
+//
+
+require tensorflow;
+operator entry() {
+  report('Loaded!!');
+
+  TFGraphWrapper wrapper = TFLoadGraph( "SomeFilepath",  "IDon'tKnow",  3, 3);
+}
