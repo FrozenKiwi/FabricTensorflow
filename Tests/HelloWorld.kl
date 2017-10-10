@@ -7,6 +7,18 @@ require tensorflow;
 operator entry() {
   report('Loaded!!');
 
-  TFGraphWrapper wrapper = TFLoadGraph( "C:/src/TADevelopment/scatter-brained-master/scatter-brained-ik/tensorflow_model/ik_3D_bone1_50.h5.pb",  "dense_1_input",  3, 3);
-  report(wrapper);
+  TFGraphWrapper graph = TFLoadGraph( "C:/src/TADevelopment/scatter-brained-master/scatter-brained-ik/tensorflow_model/ik_3D_bone1_50.h5.pb",  "dense_1_input",  3, 2);
+  report(graph);
+
+  Float32 outputs[];
+  Float32 inputs[];
+  inputs.push(0.1);
+  inputs.push(0.3);
+  inputs.push(0.5);
+  outputs.resize(3);
+
+  Boolean success = TFEvalGraph(graph, inputs, outputs);
+
+  report("Success: " + success);
+  report("Outputs: " + outputs);
 }

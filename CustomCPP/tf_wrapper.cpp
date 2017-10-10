@@ -135,7 +135,32 @@ TFGraphWrapper* TFLoadGraph(const char* filepath, const char* inputOpName, int n
 	
 	return wrapper;
 }
-bool TFEvalGraph(TFGraphWrapper* graph, float* inputs, int numinputs, float* outputs, int numoutputs)
+bool TFEvalGraph(TFGraphWrapper* wrapper, float* inputs, int numinputs, float* outputs, int numoutputs)
 {
-	return false;
+	// Write data to input tensor
+	TF_Tensor* input_tensor = wrapper->input_values[0];
+	// Ensure we don't try to write too many variables
+	int tensor_dim = TF_Dim(input_tensor, 1);
+	tensor_dim = tensor_dim < numinputs ? tensor_dim : numinputs;
+
+	float* in_vals = static_cast<float*>(TF_TensorData(input_tensor));
+	memcpy( in_vals, inputs, sizeof(float) * tensor_dim);
+
+	// Call TF_SessionRun
+	TF_SessionRun( wrapper->session, nullptr,
+				   &wrapper->inputs[0], &wrapper->input_values[0], (int)wrapper->inputs.size(),
+				   &wrapper->outputs[0], &wrapper->output_values[0], (int)wrapper->outputs.size(),
+				   nullptr, 0, nullptr, wrapper->status );
+
+	if (TF_GetCode( wrapper->status ) != TF_OK) {
+		//CStr str;
+		//str.printf( "ERROR: Unable to import graph %s", TF_Message( status ) );
+		//DebugPrint( str.ToMSTR() );
+		return false;
+	}
+
+	// Assign the values from the output tensor to a variable and iterate over them
+	float* out_vals = static_cast<float*>(TF_TensorData( wrapper->output_values[0] ));
+	memcpy(outputs, out_vals, sizeof(float) * numoutputs);
+	return true;
 }
