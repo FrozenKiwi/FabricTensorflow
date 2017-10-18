@@ -7,18 +7,26 @@ require tensorflow;
 operator entry() {
   report('Loaded!!');
 
-  TFGraphWrapper graph = TFLoadGraph( "C:/src/TADevelopment/scatter-brained-master/scatter-brained-ik/tensorflow_model/ik_3D_bone1_50.h5.pb",  "dense_1_input",  3, 2);
-  report(graph);
+  TFGraphWrapper graphPos = TFLoadGraph( "C:/src/TADevelopment/scatter-brained-master/scatter-brained-ik/models/char_baked/hip.pos.pb",  "input_layer_input",  24, 3);
+  TFGraphWrapper graphRot = TFLoadGraph( "C:/src/TADevelopment/scatter-brained-master/scatter-brained-ik/models/char_baked/hip.rot.pb",  "input_layer_input",  24, 3);
+  TFGraphWrapper graphThigh = TFLoadGraph( "C:/src/TADevelopment/scatter-brained-master/scatter-brained-ik/models/char_baked/lthigh.pb",  "input_layer_input",  6, 3);
+  report(graphPos);
 
   Float32 outputs[];
   Float32 inputs[];
-  inputs.push(0.1);
-  inputs.push(0.3);
-  inputs.push(0.5);
+  inputs.resize(24);
   outputs.resize(3);
 
-  Boolean success = TFEvalGraph(graph, inputs, outputs);
-
+  Boolean success = TFEvalGraph(graphPos, inputs, outputs);
   report("Success: " + success);
   report("Outputs: " + outputs);
+
+  success = TFEvalGraph(graphRot, inputs, outputs);
+  report("Success: " + success);
+  report("Outputs: " + outputs);
+
+  success = TFEvalGraph(graphThigh, inputs, outputs);
+  report("Success: " + success);
+  report("Outputs: " + outputs);
+
 }
